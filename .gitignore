@@ -1,0 +1,18 @@
+
+# Folders to ignore
+/_old
+/input
+/output
+/result
+/figures
+
+# Folders NOT to ignore
+!/simx
+
+# Files to ignore
+
+# Files NOT to ignore
+!env.yml
+!hts.py
+!input.yml
+!run.py
