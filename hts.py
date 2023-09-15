@@ -3,6 +3,8 @@ __license__ = ""
 __maintainer__ = "TUM-Doepfert"
 __email__ = "markus.doepfert@tum.de"
 
+import os.path
+
 from ruamel.yaml import YAML
 from pprint import pprint
 # from input import *
@@ -10,31 +12,39 @@ import pandas as pd
 from pyfmi import load_fmu
 import math
 from statistics import mean
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 pd.options.mode.chained_assignment = None  # default='warn'
 
 
 class Hts:
 
-    def __init__(self, path_config: str = "./input.yml", path_weather: str = "./input/weather.csv",
-                 path_power: str = "./input/power.csv", calc_occupancy: bool = True):
+    def __init__(self, config: dict = None, weather: pd.DataFrame = None, power: pd.DataFrame = None,
+                 path_config: str = "./input.yml", path_weather: str = "./input/weather.csv",
+                 path_power: str = "./input/power.csv", calc_occupancy: bool = True, resolution: int = 900,
+                 occup_resolution: int = None):
 
         # Load config
-        self.config = self.load_config(path_config)
+        self.config = config if config is not None else self.load_config(path_config)
+
+        # Set resolution of simulation (in seconds)
+        self.resolution = resolution
 
         # Create weather file
-        self.weather = self.get_weather(path=path_weather)
+        self.weather = weather if weather is not None else self.get_weather(path=path_weather)
         self.format_weather()
         self.save_weather()
 
         # Create electricity file
-        self.power = self.get_power(path=path_power)
+        self.power = power if power is not None else self.get_power(path=path_power)
         self.format_power()
         self.save_power()
 
         # Create occupancy file
         if calc_occupancy:
-            self.occup = self.prepare_occupancy()
+            occup_resolution = 1800
+            self.occup = self.prepare_occupancy(occup_resolution)  # TODO: replace once it is done for main branch (1800 s in accordance with the paper it is based on)
             self.calc_occupancy()
             self.save_occupancy()
 
@@ -58,13 +68,12 @@ class Hts:
         # Change temperature format from Kelvin to Celsius
         self.weather["temp"] = round(self.weather["temp"] - 273.15, 2)
 
-        # Insert column with 7 day average temperature TODO: Fix 7-day average
-        # num_entries = int(3600 * 24 * 7 / (self.weather["timestamp"].iat[1] - self.weather["timestamp"].iat[0]))
-        # for week in range(math.ceil((self.weather["timestamp"].iat[-1]
-        #                              - self.weather["timestamp"].iat[0]) / 3600 / 24 / 7)):
-        #     self.weather.loc[week * num_entries: (week + 1) * num_entries, "avg_7"] = \
-        #         round(self.weather["temp"].iloc[week * num_entries: (week + 1) * num_entries].mean(), 2)
-        self.weather["avg_7"] = 0
+        # Make index datetime index
+        self.weather.index = pd.to_datetime(self.weather["timestamp"], unit="s")
+        self.weather.index.name = 'datetime'
+
+        # Insert column with 7-day average temperature
+        self.weather["avg_7"] = self.weather["temp"].rolling(window=f"7D").mean().round(1)
 
         # Change order of columns to SimX format
         self.weather = self.weather[["timestamp", "temp", "avg_7", "ghi", "dhi", "wind_speed", "wind_dir", "humidity"]]
@@ -93,11 +102,11 @@ class Hts:
             file.write("#1\n")
             # Time
             file.write(f"double\tT_StartEnd ({df_time.shape[0]}, {df_time.shape[1]})\n")
-            df_time.to_csv(file, header=False, index=False, sep='\t', line_terminator='\n')
+            df_time.to_csv(file, header=False, index=False, sep='\t', lineterminator='\n')
             # Weather
             file.write("\n")
             file.write(f"double\tWeather({self.weather.shape[0]}, {self.weather.shape[1]})\n")
-            self.weather.to_csv(file, header=False, index=False, sep='\t', line_terminator='\n')
+            self.weather.to_csv(file, header=False, index=False, sep='\t', lineterminator='\n')
 
     def format_power(self) -> pd.DataFrame:
         """
@@ -128,7 +137,7 @@ class Hts:
         # Write independent header and save electricity consumption with the required SimX format
         self.save_simx_file(df=self.power, header="Pel", path=path)
 
-    def prepare_occupancy(self) -> pd.DataFrame:
+    def prepare_occupancy(self, resolution: int = None) -> pd.DataFrame:
         """
         Formats the occupancy time series to the required format
 
@@ -139,7 +148,18 @@ class Hts:
         self.occup = self.power.copy()
         self.occup["date"] = pd.to_datetime(self.occup["timestamp"], unit="s")
         self.occup["time"] = self.occup["date"].dt.strftime("%X")
-        self.occup["hours"] = self.occup["date"].dt.strftime("%H").astype("int")
+        self.occup["hours"] = self.occup["date"].dt.strftime("%H").astype(int)
+
+        # Resample to desired resolution
+        if resolution:
+            self.occup = self.occup.resample(f'{resolution}S', on="date").mean(numeric_only=True).reset_index()
+            self.occup = self.occup.fillna(method="ffill")
+            self.occup = round(self.occup)
+
+        # Adjust data format
+        self.occup["timestamp"] = self.occup["date"].astype("int64") // 10 ** 9
+        self.occup['power'] = self.occup['power'].astype(int)
+        self.occup['hours'] = self.occup['hours'].astype(int)
 
         return self.occup
 
@@ -161,6 +181,29 @@ class Hts:
                 raise Warning(f"Method {method} for occupancy calculation unknown.")
         else:
             self.occup["occup"] = 1
+
+        # Change resolution to that of simulation
+        if self.occup['timestamp'].iat[1] - self.occup['timestamp'].iat[1] != self.resolution:
+            self.occup = self.occup.resample(f'{self.resolution}S', on="date").mean(numeric_only=True).reset_index()
+            self.occup['timestamp'] = self.occup['timestamp'].interpolate(method='linear')
+            self.occup = self.occup.fillna(method="ffill")
+
+            # Check if length of occupancy is equal to length of power file
+            if len(self.occup) < len(self.power):
+                # Calculate the difference in length
+                diff = len(self.power) - len(self.occup)
+
+                # Append the last occupancy value to the occupancy file with the correct timestamp
+                for i in range(diff):
+                    self.occup = self.occup.append(self.occup.iloc[-1], ignore_index=True)
+                    self.occup["timestamp"].iat[-1] = self.occup["timestamp"].iat[-2] + self.resolution
+
+
+            # Adjust data format
+            self.occup["timestamp"] = self.occup["timestamp"].astype(int)
+            self.occup['power'] = self.occup['power'].astype(int)
+            self.occup['hours'] = self.occup['hours'].astype(int)
+            self.occup['occup'] = self.occup['occup'].astype(int)
 
         return self.occup
 
@@ -356,26 +399,31 @@ class Hts:
             "building.cRH": self.config["building"]["height"],          # ceiling height [m]
             "building.flanking": 0,                                     # flanking buildings [0, 1, 2]
             "building.outline": True,                                   # outline: True: long-stretched; False: compact
-            "building.livingTZoneInit": self.config["heating"]["temp_ref"] + 273.15,  # initial room temperature [K]
+            "building.livingTZoneInit": self.config["heating"]["setpoint"] + 273.15,  # initial room temperature [K]
 
             # Heating
             "building.QHeatNormLivingArea": q_heat,                         # area specific heating power [W/m²]
             "building.n": n,                                                # heating system exponent
             "building.TFlowHeatNorm": temp_flow + 273.15,                   # flow temperature [K]
             "building.TReturnHeatNorm": temp_return + 273.15,               # return temperature [K]
-            "building.TRef": self.config["heating"]["temp_ref"] + 273.15,   # reference room temperature [K]
+            "building.TRefHeating": self.config["heating"]["setpoint"] + 273.15,   # reference heating temperature [K]
             "building.qvMaxLivingZone": q_flow / 1000 / 60,                 # max. flow rate [m³/s]
 
+            # Cooling
+            "building.ActivateCooling": True,                                     # activate cooling
+            "building.TRefCooling": self.config["cooling"]["setpoint"] + 273.15,  # reference cooling temperature [K]
+            "building.TFlowCooling": 15 + 273.15,                                 # flow temperature [K]
+
             # Operation
-            "building.UseIndividualPresence": True,         # use occupancy file (always on as considered elsewhere)
+            "building.UseIndividualPresence": True,                                 # use occupancy file
             "building.PresenceFile": "./simx/occupancy.txt",                        # occupancy file path
-            "building.UseIndividualElecConsumption": True,  # use electricity file (always on as considered elsewhere)
+            "building.UseIndividualElecConsumption": True,                          # use electricity file
             "building.ElConsumptionFile": "./simx/power.txt",                       # electricity file path
             "building.QPerson": 110,                                                # heat yield per person [W]
             "building.ActivateNightTimeReduction": self.config["operation"]["nighttime_reduction"],  # use night time
-            "building.Tnight": self.config["operation"]["night_temp"] + 273.15,                     # night temp. [K]
-            "building.NightTimeReductionStart": self.config["operation"]["night_start"] * 3600,  # start night time [s]
-            "building.NightTimeReductionEnd": self.config["operation"]["night_end"] * 3600,         # end night time [s]
+            "building.Tnight": self.config["operation"]["night_temp"] + 273.15,                      # night temp. [K]
+            "building.NightTimeReductionStart": self.config["operation"]["night_start"] * 3600,      # start night [s]
+            "building.NightTimeReductionEnd": self.config["operation"]["night_end"] * 3600,          # end night [s]
             "building.VariableTemperatureProfile": self.config["operation"]["occupancy_reduction"],  # use occupancy
             "building.TMin": self.config["operation"]["occupancy_temp"] + 273.15,    # non-occupancy temp. [K]
 
@@ -390,18 +438,18 @@ class Hts:
             "building.newWindows": self.config["insulation"]["window_new"],         # new windows after construction
 
             # Environment
-            "environment.InputFile": "./simx/weather.txt",  # weather file path
-            "environment.Altitude": self.config["environment"]["altitude"],  # altitude [m]
-            "environment.alpha": self.config["environment"]["longitude"] * math.pi / 180,  # longitude [rad]
-            "environment.beta": self.config["environment"]["latitude"] * math.pi / 180,  # latitude [rad]
-            "environment.UnixTimeInit": self.weather.iloc[0, 0],  # initial unix timestamp [s]
-            "environment.cGround": 1.339,  # spec. ground heat capacity [kJ/(kgK)]
-            "environment.lambdaGround": 1.45,  # ground heat conductivity [W/(mK)]
-            "environment.rhoGround": 1800,  # ground density [kg/m³]
-            "environment.GeoGradient": 0.025,  # geothermal gradient [K]
-            "environment.alphaAirGround": 1.8,  # transmission coeff. ground to air [W/(m²K)]
-            "environment.cpAir": 1.005,  # spec. air heat capacity [kJ/(kgK)]
-            "environment.rhoAir": 1.1839,  # air density [kg/m³]
+            "environment.Filename": "./simx/weather.txt",                                  # weather file path
+            "environment.Altitude": self.config["environment"]["elevation"],                # elevation [m]
+            "environment.alpha": self.config["environment"]["longitude"] * math.pi / 180,   # longitude [rad]
+            "environment.beta": self.config["environment"]["latitude"] * math.pi / 180,     # latitude [rad]
+            "environment.UnixTimeInit": self.weather.iloc[0, 0],        # initial unix timestamp [s]
+            "environment.cGround": 1.339,                               # spec. ground heat capacity [kJ/(kgK)]
+            "environment.lambdaGround": 1.45,                           # ground heat conductivity [W/(mK)]
+            "environment.rhoGround": 1800,                              # ground density [kg/m³]
+            "environment.GeoGradient": 0.025,                           # geothermal gradient [K]
+            "environment.alphaAirGround": 1.8,                          # transmission coeff. ground to air [W/(m²K)]
+            "environment.cpAir": 1.005,                                 # spec. air heat capacity [kJ/(kgK)]
+            "environment.rhoAir": 1.1839,                               # air density [kg/m³]
         }
 
         return params
@@ -414,10 +462,10 @@ class Hts:
         """
 
         # Get variables from config
-        power = self.config["heating"]["heat_power"]
+        power = self.config["heating"]["power"]
         area = self.config["building"]["area"]
         year = self.config["building"]["year"]
-        heating = self.config["heating"]["heat_system"]
+        heating = self.config["heating"]["system"]
 
         if year <= 1918:  # model: 1918
             if heating == "low-temp":
@@ -448,7 +496,7 @@ class Hts:
                 else:
                     power_f = 0.168
             else:
-                raise Warning(f"{heating} is not a valid variable for 'heat_system'.")
+                raise Warning(f"{heating} is not a valid variable for 'system'.")
         elif 1919 <= year < 1949:  # model: 1919
             if heating == "low-temp":
                 area_f = -5e-6 * area ** 2 + 7e-3 * area + 0.0975  # area factor to calculate normalized power
@@ -478,7 +526,7 @@ class Hts:
                 else:
                     power_f = 0.17
             else:
-                raise Warning(f"{heating} is not a valid variable for 'heat_system'.")
+                raise Warning(f"{heating} is not a valid variable for 'system'.")
         elif 1949 <= year < 1958:  # model: 1949
             if heating == "low-temp":
                 area_f = -4e-6 * area ** 2 + 6.7e-3 * area + 0.1265  # area factor to calculate normalized power
@@ -508,7 +556,7 @@ class Hts:
                 else:
                     power_f = 0.168
             else:
-                raise Warning(f"{heating} is not a valid variable for 'heat_system'.")
+                raise Warning(f"{heating} is not a valid variable for 'system'.")
         elif 1958 <= year < 1969:  # model: 1958
             if heating == "low-temp":
                 area_f = -5e-6 * area ** 2 + 6.9e-3 * area + 0.102  # area factor to calculate normalized power
@@ -538,7 +586,7 @@ class Hts:
                 else:
                     power_f = 0.169
             else:
-                raise Warning(f"{heating} is not a valid variable for 'heat_system'.")
+                raise Warning(f"{heating} is not a valid variable for 'system'.")
         elif 1969 <= year < 1979:  # model: 1969
             if heating == "low-temp":
                 area_f = -5e-6 * area ** 2 + 7.1e-3 * area + 0.1014  # area factor to calculate normalized power
@@ -568,7 +616,7 @@ class Hts:
                 else:
                     power_f = 0.165
             else:
-                raise Warning(f"{heating} is not a valid variable for 'heat_system'.")
+                raise Warning(f"{heating} is not a valid variable for 'system'.")
         elif 1979 <= year < 1984:  # model: 1979
             if heating == "low-temp":
                 area_f = -5e-6 * area ** 2 + 7e-3 * area + 0.1069  # area factor to calculate normalized power
@@ -598,7 +646,7 @@ class Hts:
                 else:
                     power_f = 0.164
             else:
-                raise Warning(f"{heating} is not a valid variable for 'heat_system'.")
+                raise Warning(f"{heating} is not a valid variable for 'system'.")
         elif 1984 <= year < 1995:  # model: 1984
             if heating == "low-temp":
                 area_f = -4e-6 * area ** 2 + 7e-3 * area + 0.1212  # area factor to calculate normalized power
@@ -628,7 +676,7 @@ class Hts:
                 else:
                     power_f = 0.163
             else:
-                raise Warning(f"{heating} is not a valid variable for 'heat_system'.")
+                raise Warning(f"{heating} is not a valid variable for 'system'.")
         elif 1995 <= year < 2002:  # model: 1995
             if heating == "low-temp":
                 area_f = -5e-6 * area ** 2 + 7.2e-3 * area + 0.1  # area factor to calculate normalized power
@@ -658,7 +706,7 @@ class Hts:
                 else:
                     power_f = 0.162
             else:
-                raise Warning(f"{heating} is not a valid variable for 'heat_system'.")
+                raise Warning(f"{heating} is not a valid variable for 'system'.")
         elif 2002 <= year < 2009:  # model: 2002
             if heating == "low-temp":
                 area_f = -6e-6 * area ** 2 + 7.2e-3 * area + 0.0761  # area factor to calculate normalized power
@@ -688,7 +736,7 @@ class Hts:
                 else:
                     power_f = 0.162
             else:
-                raise Warning(f"{heating} is not a valid variable for 'heat_system'.")
+                raise Warning(f"{heating} is not a valid variable for 'system'.")
         elif 2009 <= year < 2016:  # model: 2009
             if heating == "low-temp":
                 area_f = -5e-6 * area ** 2 + 7.3e-3 * area + 0.1002  # area factor to calculate normalized power
@@ -718,7 +766,7 @@ class Hts:
                 else:
                     power_f = 0.161
             else:
-                raise Warning(f"{heating} is not a valid variable for 'heat_system'.")
+                raise Warning(f"{heating} is not a valid variable for 'system'.")
         elif 2016 <= year:  # model: 2016
             if heating == "low-temp":
                 area_f = -6e-6 * area ** 2 + 7.4e-3 * area + 0.0963  # area factor to calculate normalized power
@@ -748,7 +796,7 @@ class Hts:
                 else:
                     power_f = 0.161
             else:
-                raise Warning(f"{heating} is not a valid variable for 'heat_system'.")
+                raise Warning(f"{heating} is not a valid variable for 'system'.")
         else:
             raise Warning(f"No model for {year} available.")
 
@@ -769,7 +817,7 @@ class Hts:
         """
 
         # Get heating system from confing
-        heating = self.config["heating"]["heat_system"]
+        heating = self.config["heating"]["system"]
 
         if heating == "low-temp":
             x = 2 / 15 * power / power_f - 2
@@ -784,7 +832,7 @@ class Hts:
             q_flow = round(5 / 2 * x + 5, 2)
             q_heat = round(15 * x + 20, 2)
         else:
-            raise Warning(f"{heating} is not a valid variable for 'heat_system'.")
+            raise Warning(f"{heating} is not a valid variable for 'system'.")
 
         return q_heat, q_flow
 
@@ -795,7 +843,7 @@ class Hts:
         """
 
         # Get heating system from confing
-        heating = self.config["heating"]["heat_system"]
+        heating = self.config["heating"]["system"]
 
         if heating == "low-temp":
             n = 1.1
@@ -810,7 +858,7 @@ class Hts:
             temp_flow = 70
             temp_return = 55
         else:
-            raise Warning(f"{heating} is not a valid variable for 'heat_system'.")
+            raise Warning(f"{heating} is not a valid variable for 'system'.")
 
         return n, temp_flow, temp_return
 
@@ -832,7 +880,7 @@ class Hts:
 
         return f"./simx/{built}/model_{built}.fmu"
 
-    def run_simulation(self, log: bool = False, silent: bool = False) -> None:
+    def run_simulation(self, log: int = 0, silent: bool = False) -> None:
         """
         Runs the simulation
 
@@ -841,8 +889,10 @@ class Hts:
         :return: results of the simulation
         """
 
+        self.model = None
+
         # Load model
-        self.model = load_fmu(self.fmu_path, kind="CS", log_level=7)
+        self.model = load_fmu(self.fmu_path, kind="CS", log_level=log)
 
         # Resets the FMU to its original state
         self.model.reset()
@@ -864,18 +914,18 @@ class Hts:
         # Initialize the model and compute initial values for all variables
         self.model.initialize()
 
-        # # pprint(dir(self.model))
+        # pprint(dir(self.model))
         # for var in self.model.get_model_variables():
         #     try:
         #         print(f'{var}: {self.model.get_variable_start(var)}')
         #     except:
         #         print(var)
-        # exit()
+        # return
 
         # Simulate
         self.res = self.model.simulate(start_time=self.start, final_time=self.end, options=opts)
 
-        return self.res
+        self.model.terminate()
 
     def print_all_keys(self) -> None:
         """Prints all available parameters to be retrieved from the simulation results."""
@@ -884,26 +934,27 @@ class Hts:
         pprint(self.res.keys())
 
     def save_results(self, path: str = "./output/results.csv", keys: list = None, si_units: bool = False,
-                     heat_power_from_energy: bool = True) -> pd.DataFrame:
+                     power_from_energy: bool = True) -> pd.DataFrame:
         """
         Obtains the desired output results and saves them to a csv file.
 
         :param path: path to which to save the results
         :param keys: keys of the output parameters (all keys can be displayed with print_all_keys())
         :param si_units: should results be returned as SI units or as the units of the input
-        :param heat_power_from_energy: calculate heating power from energy time series or power time series (power time
-                                        series records momentous power and not average power over time)
+        :param power_from_energy: calculate heating and cooling power from energy time series or power time series
+                                  (power time series records momentous power and not average power over time)
 
         :return: results of the simulation
         """
 
         # Use standard set of output if no keys are given
         keys = keys if keys is not None else ['building.QHeat',
-                                              'building.livingZone.ZoneTemperatures.ZoneTemperature[2]']
+                                              'building.QCold',
+                                              'building.TZone[2]']
 
         # Dictionary containing the name and the factor of the respective key
         # Note: The factor serves to convert back to non-SI units,
-        #           if K2C is given Kelvin is converted to celsius (no factor but subtraction)
+        #           if K2C is given Kelvin is converted to Celsius (no factor but subtraction)
         #           if None is given there is no conversion
         names = {
             # General
@@ -911,20 +962,30 @@ class Hts:
                      'name': 'time'},
 
             # Results
+            'building.UnixTime': {'factor': 1,                                                      # [s]
+                                  'name': 'unixtime'},
+            'building.Heating': {'factor': None,                                                    # [1]
+                                 'name': 'heating'},
+            'building.Cooling': {'factor': None,                                                    # [1]
+                                 'name': 'cooling'},
             'building.QHeat': {'factor': 1,                                                         # [W]
                                'name': 'heat_power'},
+            'building.QCold': {'factor': 1,                                                         # [W]
+                               'name': 'cool_power'},
             'building.EHeat': {'factor': 1 / 3600,                                                  # [Wh]
                                'name': 'heat_energy'},
+            'building.ECold': {'factor': 1 / 3600,                                                  # [Wh]
+                               'name': 'cool_energy'},
             'building.Pel': {'factor': 1,                                                           # [W]
                              'name': 'electricity_power'},
             'building.Eel': {'factor': 1 / 3600,                                                    # [Wh]
                              'name': 'electricity_energy'},
-            'building.livingZone.ZoneTemperatures.ZoneTemperature[1]': {'factor': "K2C",            # [°C]
-                                                                        'name': 'temp_cellar'},
-            'building.livingZone.ZoneTemperatures.ZoneTemperature[2]': {'factor': "K2C",            # [°C]
-                                                                        'name': 'temp_indoor'},
-            'building.livingZone.ZoneTemperatures.ZoneTemperature[3]': {'factor': "K2C",            # [°C]
-                                                                        'name': 'temp_attic'},
+            'building.TZone[1]': {'factor': "K2C",                                            # [°C]
+                                        'name': 'temp_cellar'},
+            'building.TZone[2]': {'factor': "K2C",                                            # [°C]
+                                        'name': 'temp_indoor'},
+            'building.TZone[3]': {'factor': "K2C",                                            # [°C]
+                                        'name': 'temp_attic'},
 
             # Building
             'building.nFloors': {'factor': None,                                                    # [1]
@@ -953,12 +1014,16 @@ class Hts:
                                        'name': 'temp_flow'},
             'building.TReturnHeatNorm': {'factor': "K2C",                                           # [°C]
                                          'name': 'temp_return'},
-            'building.TRef': {'factor': "K2C",                                                      # [°C]
-                              'name': 'temp_ref'},
-            'building.TRefSet': {'factor': "K2C",                                                   # [°C]
-                                 'name': 'temp_ref_set'},
+            'building.TRefHeating': {'factor': "K2C",                                               # [°C]
+                                     'name': 'temp_heat_ref'},
+            'building.TRefSetHeating': {'factor': "K2C",                                            # [°C]
+                                        'name': 'temp_heat_ref_set'},
             'building.qvMaxLivingZone': {'factor': 6e4,                                             # [l/min]
                                          'name': 'q_flow'},
+
+            # Cooling
+            'building.TRefCooling': {'factor': "K2C",                                               # [°C]
+                                     'name': 'temp_cool_ref'},
 
             # Operation
             'building.UseIndividualPresence': {'factor': None,                                      # [1]
@@ -1002,7 +1067,7 @@ class Hts:
             'environment.TAmbient': {'factor': "K2C",                                               # [°C]
                                      'name': 'temp_ambient'},
             'environment.Altitude': {'factor': 1,                                                   # [m]
-                                     'name': 'altitude'},
+                                     'name': 'elevation'},
             'environment.alpha': {'factor': 180 / math.pi,                                          # [°]
                                   'name': 'longitude'},
             'environment.beta': {'factor': 180 / math.pi,                                           # [°]
@@ -1045,17 +1110,25 @@ class Hts:
 
         # Calculate heating power from energy demand and not from power column, which contains momentous power
         # Note: Use if accuracy of heating demand necessary, otherwise use power for peak heating power
-        if heat_power_from_energy:
-            # Calculate power from energy
-            self.results["power_en"] = self.res["building.EHeat"] * names["building.EHeat"]["factor"]
-            self.results.loc[:, "power_en"] = self.results["power_en"].diff() * 3600 / self.res["time"][1]
-            self.results["heat_power"].iloc[:-1] = self.results["power_en"].iloc[1:]
+        if power_from_energy:
+            # Calculate heating power from energy
+            self.results["heat_power_en"] = self.res["building.EHeat"] * names["building.EHeat"]["factor"]
+            self.results.loc[:, "heat_power_en"] = self.results["heat_power_en"].diff() * 3600 / self.res["time"][1]
+            self.results["heat_power"].iloc[:-1] = self.results["heat_power_en"].iloc[1:]
+
+            # Calculate cooling power from energy
+            self.results["cool_power_en"] = self.res["building.ECold"] * names["building.ECold"]["factor"]
+            self.results.loc[:, "cool_power_en"] = self.results["cool_power_en"].diff() * 3600 / self.res["time"][1]
+            self.results["cool_power"].iloc[:-1] = self.results["cool_power_en"].iloc[1:]
+
 
             # Column formatting
             self.results["heat_power"] = round(self.results["heat_power"]).astype("int64")
+            self.results["cool_power"] = round(self.results["cool_power"]).astype("int64")
 
-            # Drop auxiliary column
-            self.results.drop("power_en", axis=1, inplace=True)
+            # Drop auxiliary columns
+            self.results.drop("heat_power_en", axis=1, inplace=True)
+            self.results.drop("cool_power_en", axis=1, inplace=True)
 
         # Save results to csv file
         self.results.to_csv(path, index=False)
@@ -1098,7 +1171,7 @@ class Hts:
         # Write independent header and save electricity consumption with the required SimX format
         with open(path, "w") as file:
             file.write("#1\n")
-            df.to_csv(file, index=False, sep='\t', line_terminator='\n',
+            df.to_csv(file, index=False, sep='\t', lineterminator='\n',
                       header=["double", f"{header}({df.shape[0]}, {df.shape[1]})"])
 
     @staticmethod

@@ -5,6 +5,8 @@
 /output
 /result
 /figures
+/_old/validation_heating
+/validation
 
 # Folders NOT to ignore
 !/simx

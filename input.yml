@@ -2,7 +2,7 @@
 ################################################# configuration ########################################################
 ########################################################################################################################
 building:
-  year:       2016            # year of construction
+  year:       2018            # year of construction
   apartments: 1               # number of apartments in the building, e.g. 1 = single-family home
   floors:     2               # number of floors
   area:       140             # living area [m²]
@@ -10,21 +10,24 @@ building:
   occupants:  4               # number of occupants
 
 heating:
-  heat_system:  "low-temp"    # heating system
+  system:  "low-temp"         # heating system
                               # options:
                               #   "low-temp": floor heating with FT/RT 40/30 °C
                               #   "mid-temp": radiator heating with FT/RT 55/45 °C
                               #   "high-temp" radiator heating with FT/RT 70/60 °C
-  heat_power:   7             # heating power [kW]
-  temp_ref:     21            # reference temperature [°C]
+  power:   7                  # heating power [kW]
+  setpoint:     21            # heating setpoint [°C]
+
+cooling:
+  setpoint:     22            # cooling setpoint [°C]
 
 operation:
   occupancy:            True  # use occupancy profile, if False occupancy always on
   electricity:          True  # use electricity profile, if False no electricity used
-  nighttime_reduction:  False  # use night-time reduction
-  night_temp:           17    # night-time reference temperature [°C]
-  night_start:          22    # night-time beginning [h]
-  night_end:            5     # night-time end [h]
+  nighttime_reduction:  False  # use nighttime reduction
+  night_temp:           17    # nighttime reference temperature [°C]
+  night_start:          22    # nighttime beginning [h]
+  night_end:            5     # nighttime end [h]
   occupancy_reduction:  False  # use occupancy-dependent temperature reduction
   occupancy_temp:       20    # occupancy-dependent reference temperature[°C]
 
@@ -37,6 +40,6 @@ insulation:
   window_new: False           # new windows installed after construction
 
 environment:
-  altitude:   519             # altitude of location [m]
+  elevation:   519            # altitude of location [m]
   longitude:  11.5679         # longitude of location [°]
   latitude:   48.1497         # latitude of location [°]
