@@ -1,0 +1,105 @@
+CC = gcc
+COMPILEFORX64 = -m64
+OPTIMIZEFLAGS = -O3
+RM = del
+CFLAGS = $(COMPILEFORX64) -w $(OPTIMIZEFLAGS)
+COMPSIMFLAGS =
+CPPFLAGS = $(COMPSIMFLAGS) -DNDEBUG -DTABLE_SHARE -DHAVE_ZLIB=1 -DHAVE_UNISTD_H -DHAVE_STDARG_H=1 -DHAVE_HIDDEN -DHAVE_MEMCPY
+OMPFLAGS =
+OPTFLAGS =
+
+PLATFORMDIR = win64
+INC = \
+	-I . \
+	-I ".\sundials\include" \
+	-I "c:\users\public\documents\simulationx 4.2\modelica\modelica 3.2.2"
+LDFLAGS = -Wl,--no-undefined -Wl,--allow-multiple-definition 
+LDLIBS =
+
+OBJECTS_WITH_PATH0 = \
+	.\ITI_ArrayFunctions.o \
+	.\ITI_FunctionsAlloc.o \
+	.\ITI_Functions.o \
+	.\ITI_LinSolver.o \
+	.\ITI_big_uint.o \
+	.\ITI_Memory.o \
+	.\ModelicaUtilities.o \
+	.\snprintf.o \
+	.\ITI_AllocClockInference.o \
+	.\ITI_ClockInference.o \
+	.\ITI_ClockEval.o \
+	.\ITI_PartitionEval.o \
+	.\ITI_PartitionInit.o \
+	.\ITI_PartitionSolver.o \
+	.\ITI_PartitionInterface.o \
+	.\ModelicaStandardTables.o \
+	.\ModelicaStandardTablesUsertab.o \
+	.\zlib.o \
+	.\c_aes.o \
+	.\ModelicaIO.o \
+	.\ModelicaMatIO.o \
+	.\ModelicaStrings.o \
+	.\ITI_SolverHelpers.o \
+	.\ITI_NonLinSolver.o \
+	.\ITI_Cvode_FMI_CS.o \
+	.\ITI_fmiCSFunctions.o \
+	.\ITI_Tracing.o \
+	.\ITI_Cvode_base.o \
+	.\ITI_Cvode_model_if.o \
+	.\ITI_Cvode_jac.o \
+	.\ITI_Cvode_helpers.o \
+	.\ITI_Cvode_sparse.o \
+	.\ma_lequspar.o \
+	.\ma_matspars.o \
+	.\ma_serialization.o \
+	.\sundials\src\cvode\cvode.o \
+	.\sundials\src\cvode\cvode_dense.o \
+	.\sundials\src\cvode\cvode_io.o \
+	.\sundials\src\cvode\cvode_serialization.o \
+	.\sundials\src\cvode\cvode_tracing.o \
+	.\sundials\src\nvec_ser\nvector_serial.o \
+	.\sundials\src\sundials\sundials_dense.o \
+	.\sundials\src\sundials\sundials_math.o \
+	.\sundials\src\sundials\sundials_nvector.o \
+	.\sundials\src\sundials\sundials_serialization.o \
+	.\sundials\src\sundials\sundials_smalldense.o \
+	.\cg_model_1918.o \
+	.\cg_model_1918_init.o \
+	.\cg_model_1918_functions.o \
+	.\cg_model_1918_decl.o \
+	.\cg_model_1918_initjac.o \
+	.\cg_model_1918_jac.o
+
+all : model_1918.dll
+	@echo clean intermediate binaries
+	@$(RM) $(OBJECTS_WITH_PATH0) 2>nul
+
+model_1918.dll:  $(OBJECTS_WITH_PATH0)
+	@echo build model_1918.dll
+	@$(CC) $(CFLAGS) $(OMPFLAGS) -o model_1918.dll $(OBJECTS_WITH_PATH0) -shared -s $(LIBPATH)  -L . $(LDFLAGS)  $(LDLIBS)
+
+%.o: %.c
+	@echo $<
+	@$(CC) $(CPPFLAGS) $(CFLAGS) $(OMPFLAGS) $(OPTFLAGS) $(INC) -o $@ -c $<
+
+clean:
+	@echo clean intermediate binaries
+	@$(RM) $(OBJECTS_WITH_PATH0) 2>nul
+	@$(RM) model_1918.lib 2>nul
+
+distclean:
+	@echo clean all generated binaries
+	@$(RM) $(OBJECTS_WITH_PATH0) 2>nul
+	$(RM) model_1918.dll
+
+info:
+	@echo "This Makefile is generated from SimulationX for TDM-GCC-64 under Windows platform"
+
+
+help:
+	@echo "targets:"
+	@echo "  make -f makefile_tdmgcc all      : build programm or library and remove temporary files after build"
+	@echo "  make -f makefile_tdmgcc clean    : remove temporary files"
+	@echo "  make -f makefile_tdmgcc distclean: remove all generated binary files"
+	@echo "  make -f makefile_tdmgcc info     : print info about environment/requirements"
+	@echo "  make -f makefile_tdmgcc help     : print this message"

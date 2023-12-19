@@ -4,7 +4,7 @@ from hts import Hts
 hts = Hts()
 
 # Run simulation
-hts.run_simulation(silent=True)
+hts.run_simulation()
 
 # Save results
 hts.save_results()

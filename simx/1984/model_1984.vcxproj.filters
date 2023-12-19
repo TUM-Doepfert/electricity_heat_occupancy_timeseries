@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4bf3ac9a-5b5b-4ff6-afc5-40a0ff6af6ec}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{57c9f675-92c0-4cb8-b311-00ca6af23d3e}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ITI_ArrayFunctions.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_FunctionsAlloc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_Functions.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_LinSolver.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_big_uint.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_Memory.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelicaUtilities.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="snprintf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_AllocClockInference.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_ClockInference.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_ClockEval.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_PartitionEval.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_PartitionInit.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_PartitionSolver.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_PartitionInterface.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelicaStandardTables.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelicaStandardTablesUsertab.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="c_aes.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelicaIO.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelicaMatIO.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelicaStrings.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_SolverHelpers.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_NonLinSolver.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_Cvode_FMI_CS.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_fmiCSFunctions.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_Tracing.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_Cvode_base.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_Cvode_model_if.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_Cvode_jac.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_Cvode_helpers.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITI_Cvode_sparse.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ma_lequspar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ma_matspars.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ma_serialization.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sundials\src\cvode\cvode.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sundials\src\cvode\cvode_dense.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sundials\src\cvode\cvode_io.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sundials\src\cvode\cvode_serialization.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sundials\src\cvode\cvode_tracing.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sundials\src\nvec_ser\nvector_serial.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sundials\src\sundials\sundials_dense.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sundials\src\sundials\sundials_math.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sundials\src\sundials\sundials_nvector.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sundials\src\sundials\sundials_serialization.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sundials\src\sundials\sundials_smalldense.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cg_model_1984.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cg_model_1984_init.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cg_model_1984_functions.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cg_model_1984_decl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cg_model_1984_initjac.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cg_model_1984_jac.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ITI_ArrayFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_FunctionsAlloc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_Functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_LinSolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_big_uint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_Memory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_Types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelicaUtilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_BlockDeclarations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_DeclarationsBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_AllocClockInference.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_ClockInference.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_ClockEval.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_PartitionEval.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_PartitionInit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_PartitionSolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_PartitionInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gconstructor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uthash.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelicaStandardTables.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="c_aes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelicaIO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelicaMatIO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelicaStrings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_SolverHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_NonLinSolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fmiPlatformTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fmiFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_crt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_Cvode_FMI_CS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_fmiCSTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_Tracing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_Declarations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_Cvode_base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_Cvode_model_if.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_Cvode_jac.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_ModelInclude.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_Cvode_helpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITI_Cvode_sparse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ma_serialization.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ma_sparse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ma_typedef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sundials\include\cvode\cvode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sundials\include\cvode\cvode_dense.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sundials\include\cvode\cvode_serialization.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sundials\include\cvode\cvode_tracing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sundials\include\nvector\nvector_serial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sundials\include\sundials\sundials_config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sundials\include\sundials\sundials_dense.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sundials\include\sundials\sundials_math.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sundials\include\sundials\sundials_nvector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sundials\include\sundials\sundials_serialization.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sundials\include\sundials\sundials_smalldense.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sundials\include\sundials\sundials_types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sundials\src\cvode\cvode_dense_impl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sundials\src\cvode\cvode_impl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cg_model_1984.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cg_model_1984_functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cg_model_1984_CurveData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

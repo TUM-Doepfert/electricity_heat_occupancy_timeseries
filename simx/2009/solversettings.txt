@@ -1,0 +1,15 @@
+dtProtMin = 0.001
+tStart = 0
+tStop = 31536000
+dtMin = 1e-08
+dtMax = 315360
+absTol = 1e-05
+relTol = 1e-05
+traceOn = 1
+saveMode = 1
+ignoreMinMax = 0
+blockTol = 1e-07
+blockLinSolv = -1
+assertOn = 1
+assertTraceOn = 0
+stopOnError = 0

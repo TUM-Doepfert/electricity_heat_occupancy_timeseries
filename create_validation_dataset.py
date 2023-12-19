@@ -9,6 +9,7 @@ from hts import Hts
 from pprint import pprint
 from geopy.geocoders import Nominatim
 import time
+import sys
 
 ELEVATIONS = {
     'G2001690': 374,
@@ -189,10 +190,10 @@ def main():
             config_old['heating']['power'] = power_heat
             config_new = config_old.copy()  # contains the config of the newer simulation (as always two are stored)
 
-            config_old['building']['year'] = 2016
-
-            print()
-            print(config_old)
+            # config_old['building']['year'] = 2016
+            #
+            # print()
+            # print(config_old)
 
             # Dict to store the results
             results = {
@@ -209,32 +210,32 @@ def main():
             print(f'Heating: {src_orig["heating"].sum() * 0.25 / 1e6} MWh')
             print(f'Cooling: {src_orig["cooling"].sum() * 0.25 / 1e6} MWh')
 
-            for i in range(3):
+            # for i in range(3):
 
-                # Calculate the results for the first setup (1918)
-                hts = Hts(config=config_old,
-                          weather=weather,
-                          power=power)
-                hts.run_simulation(silent=True, log=7)
-                df = hts.save_results(path=os.path.join(path, household, f'{household}_sim_{year}_{i}.csv'))
-                results['older'] = df
+            # Calculate the results for the first setup (1918)
+            hts = Hts(config=config_old,
+                      weather=weather,
+                      power=power)
+            hts.run_simulation(silent=True, log=7)
+            df = hts.save_results(path=os.path.join(path, household, f'{household}_sim_{year}_pycharm.csv'))
+            results['older'] = df
 
-                print()
-                print(i)
-                print(year)
-                print(f'Heating: {df["heat_power"].sum() * 0.25 / 1e6} MWh')
-                print(f'Cooling: {df["cool_power"].sum() * 0.25 / 1e6} MWh')
+            print()
+            # print(i)
+            print(year)
+            print(f'Heating: {df["heat_power"].sum() * 0.25 / 1e6} MWh')
+            print(f'Cooling: {df["cool_power"].sum() * 0.25 / 1e6} MWh')
 
-            print('The issue seems to be in having multiple instances of a model open. It does not close the previous one.')
-
+            # print('The issue seems to be in having multiple instances of a model open. It does not close the previous one.')
+            #
             exit()
 
             # Check if results is already lower than the actual demand
             if ((df['heat_power'].sum() + df['cool_power'].sum())
                     < (src_orig['heating'].sum() + src_orig['cooling'].sum())):
                 # No need to look further as the demand is already lower
-                print("Demand lower than actual demand?:")
-                print(f"1918: {((df['heat_power'].sum() + df['cool_power'].sum()) < (src_orig['heating'].sum() + src_orig['cooling'].sum()))}")
+                # print("Demand lower than actual demand?:")
+                # print(f"1918: {((df['heat_power'].sum() + df['cool_power'].sum()) < (src_orig['heating'].sum() + src_orig['cooling'].sum()))}")
                 pass
             else:
                 # Loop through the years and thus improve the building envelope
@@ -246,23 +247,22 @@ def main():
                     config_new['building']['year'] = year
                     config_new['heating']['system'] = systems[years.index(year)]
 
-                    print()
-                    print(config_new)
+                    # print()
+                    # print(config_new)
 
                     # Run simulation for the new config
                     hts = Hts(config=config_new,
                               weather=weather,
                               power=power)
                     hts.run_simulation(silent=True)
-                    # df = hts.save_results(path=os.path.join(path, household, f'{household}_sim_{year}.csv'))
-                    # results['newer'] = df
-                    exit()
+                    df = hts.save_results(path=os.path.join(path, household, f'{household}_sim_{year}.csv'))
+                    results['newer'] = df
 
-                    print()
-                    print(year)
-                    print(f'Heating: {df["heat_power"].sum() * 0.25 / 1e6} MWh')
-                    print(f'Cooling: {df["cool_power"].sum() * 0.25 / 1e6} MWh')
-                    exit()
+                    # print()
+                    # print(year)
+                    # print(f'Heating: {df["heat_power"].sum() * 0.25 / 1e6} MWh')
+                    # print(f'Cooling: {df["cool_power"].sum() * 0.25 / 1e6} MWh')
+                    # exit()
 
                     # Check if the demand is lower than the actual demand and break if it is
                     if ((df['heat_power'].sum() + df['cool_power'].sum())
@@ -338,7 +338,7 @@ def main():
 
             # Calculate the difference between the actual demand and the simulated demand for each result
             diffs = {}
-            for key, result in results.items:
+            for key, result in results.items():
                 df = results[result]
                 if df is None:
                     continue
@@ -374,5 +374,5 @@ def main():
 
 
 if __name__ == '__main__':
-    # raise Warning('This step was already done. Move on to compare_results.py')
+    raise Warning('This step was moved to run_v.py. Move on to combine_results.py')
     main()

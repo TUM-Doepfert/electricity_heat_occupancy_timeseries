@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fmiModelDescription fmiVersion="1.0" modelName="model_1995" modelIdentifier="model_1995" description="model_1995" generationTool="SimulationX 4.2.1.68046 (12/15/20)" generationDateAndTime="2023-08-17T17:03:14" variableNamingConvention="structured" numberOfContinuousStates="97" numberOfEventIndicators="68" author="Markus Döpfert" guid="{B6060E84-C30C-4906-AC5C-7A50F3EDE122}">
+	<UnitDefinitions>
+		<BaseUnit unit="m">
+			<DisplayUnitDefinition displayUnit="m" gain="1." offset="0."/>
+			<DisplayUnitDefinition displayUnit="cm" gain="0.01" offset="0."/>
+		</BaseUnit>
+		<BaseUnit unit="rad">
+			<DisplayUnitDefinition displayUnit="°" gain="0.017453292519943295" offset="0."/>
+		</BaseUnit>
+		<BaseUnit unit="-">
+			<DisplayUnitDefinition displayUnit="-" gain="1." offset="0."/>
+		</BaseUnit>
+		<BaseUnit unit="J/(kg·K)">
+			<DisplayUnitDefinition displayUnit="kJ/(kg·K)" gain="1000." offset="0."/>
+		</BaseUnit>
+		<BaseUnit unit="W/(m·K)">
+			<DisplayUnitDefinition displayUnit="W/(m·K)" gain="1." offset="0."/>
+		</BaseUnit>
+		<BaseUnit unit="kg/m³">
+			<DisplayUnitDefinition displayUnit="kg/m³" gain="1." offset="0."/>
+		</BaseUnit>
+		<BaseUnit unit="K">
+			<DisplayUnitDefinition displayUnit="K" gain="1." offset="0."/>
+			<DisplayUnitDefinition displayUnit="°C" gain="1." offset="273.14999999999998"/>
+		</BaseUnit>
+		<BaseUnit unit="W/(m²·K)">
+			<DisplayUnitDefinition displayUnit="W/(m²·K)" gain="1." offset="0."/>
+		</BaseUnit>
+		<BaseUnit unit="m²">
+			<DisplayUnitDefinition displayUnit="m²" gain="1." offset="0."/>
+		</BaseUnit>
+		<BaseUnit unit="W/m²">
+			<DisplayUnitDefinition displayUnit="W/m²" gain="1." offset="0."/>
+		</BaseUnit>
+		<BaseUnit unit="m³/s">
+			<DisplayUnitDefinition displayUnit="l/min" gain="1.6666666666666667e-05" offset="0."/>
+			<DisplayUnitDefinition displayUnit="m³/h" gain="0.00027777777777777778" offset="0."/>
+		</BaseUnit>
+		<BaseUnit unit="Nm/s">
+			<DisplayUnitDefinition displayUnit="kW" gain="1000." offset="0."/>
+		</BaseUnit>
+		<BaseUnit unit="1/s">
+			<DisplayUnitDefinition displayUnit="1/h" gain="0.00027777777777777778" offset="0."/>
+		</BaseUnit>
+		<BaseUnit unit="s">
+			<DisplayUnitDefinition displayUnit="h" gain="3600." offset="0."/>
+		</BaseUnit>
+		<BaseUnit unit="J">
+			<DisplayUnitDefinition displayUnit="kWh" gain="3600000." offset="0."/>
+		</BaseUnit>
+	</UnitDefinitions>
+	<DefaultExperiment startTime="0" stopTime="3.1536e+07" tolerance="1e-05"/>
+	<ModelVariables>
+		<ScalarVariable name="environment.Filename" valueReference="1073741824" description="Filename" variability="parameter">
+			<String start="C:\\Users\\ge23nur\\Documents\\Python Scripts\\electricity_heat_occupancy_timeseries\\simx\\weather.txt" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="environment.Altitude" valueReference="1073741824" description="Altitude (Default: Munich)" variability="parameter">
+			<Real quantity="Length" unit="m" displayUnit="m" start="519." fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="environment.alpha" valueReference="1073741825" description="Longitude (Default: Munich)" variability="parameter">
+			<Real quantity="Angle" unit="rad" displayUnit="°" start="0.20189794254145199" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="environment.beta" valueReference="1073741826" description="Latidude (Default: Munich)" variability="parameter">
+			<Real quantity="Angle" unit="rad" displayUnit="°" start="0.84037079884751376" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="environment.UnixTimeInit" valueReference="1073741827" description="Initial unix time" variability="parameter">
+			<Real quantity="Unitless" unit="-" displayUnit="-" start="1609459200." fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="environment.cGround" valueReference="1073741828" description="Specific heat capacity of the ground" variability="parameter">
+			<Real quantity="SpecHeatCapacity" unit="J/(kg·K)" displayUnit="kJ/(kg·K)" start="1339." fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="environment.lambdaGround" valueReference="1073741829" description="Heat conductivity of the ground" variability="parameter">
+			<Real quantity="SpecHeatCond" unit="W/(m·K)" displayUnit="W/(m·K)" start="1.45" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="environment.rhoGround" valueReference="1073741830" description="Density of ground" variability="parameter">
+			<Real quantity="Density" unit="kg/m³" displayUnit="kg/m³" start="1800." fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="environment.GeoGradient" valueReference="1073741831" description="Geothermal gradient" variability="parameter">
+			<Real quantity="TempDiff" unit="K" displayUnit="K" start="0.025000000000000001" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="environment.alphaAirGround" valueReference="1073741832" description="Heat transmission coefficient between ground and air" variability="parameter">
+			<Real quantity="HeatTransmCoeff" unit="W/(m²·K)" displayUnit="W/(m²·K)" start="1.8" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="environment.cpAir" valueReference="1073741833" description="Specific heat capacity of air" variability="parameter">
+			<Real quantity="SpecHeatCapacity" unit="J/(kg·K)" displayUnit="kJ/(kg·K)" start="1004.9999999999999" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="environment.rhoAir" valueReference="1073741834" description="Density of air" variability="parameter">
+			<Real quantity="Density" unit="kg/m³" displayUnit="kg/m³" start="1.1839" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.nFloors" valueReference="1073741824" description="Number of full floors" variability="parameter">
+			<Integer quantity="Unitless" start="2" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.nAp" valueReference="1073741825" description="Number of apartments" variability="parameter">
+			<Integer quantity="Unitless" start="1" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.nPeople" valueReference="1073741826" description="Number of people living in the building" variability="parameter">
+			<Integer quantity="Unitless" start="4" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.ALH" valueReference="1073741835" description="Heated (living) area" variability="parameter">
+			<Real quantity="Area" unit="m²" displayUnit="m²" start="140." fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.cRH" valueReference="1073741836" description="Clear room hight" variability="parameter">
+			<Real quantity="Length" unit="m" displayUnit="m" start="2.6000000000000001" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.flanking" valueReference="1073741827" description="flanking buildings (0; 1; 2)" variability="parameter">
+			<Integer quantity="Unitless" start="0" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.outline" valueReference="1073741828" description="Layout of building; true: long-stretched, false: compact" variability="parameter">
+			<Boolean start="true" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.livingTZoneInit" valueReference="1073741837" description="Living Area: initial temperature" variability="parameter">
+			<Real quantity="Temp" unit="K" displayUnit="°C" start="294.14999999999998" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.QHeatNormLivingArea" valueReference="1073741838" description="Area-specific heating power - modern radiators: 14 - 15 W/m²; space heating: 15 W/m²" variability="parameter">
+			<Real quantity="HeatFlowSurf" unit="W/m²" displayUnit="W/m²" start="78." fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.n" valueReference="1073741839" description="Heating system exponent - radiator: 1.3; floor heating: 1 - 1.1" variability="parameter">
+			<Real quantity="Unitless" unit="-" displayUnit="-" start="1.3" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.TFlowHeatNorm" valueReference="1073741840" description="Normal flow temperature - radiator: 55 - 75°C; floor heating: 35 - 45°C" variability="parameter">
+			<Real quantity="Temp" unit="K" displayUnit="°C" start="343.14999999999998" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.TReturnHeatNorm" valueReference="1073741841" description="Normal return temperature - radiator: 45 - 65°C; floor heating: 28 - 35°C" variability="parameter">
+			<Real quantity="Temp" unit="K" displayUnit="°C" start="328.14999999999998" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.TRefHeating" valueReference="1073741842" description="Reference indoor temperature" variability="parameter">
+			<Real quantity="Temp" unit="K" displayUnit="°C" start="294.14999999999998" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.qvMaxLivingZone" valueReference="1073741843" description="Maximumg flow rate in Living Zone" variability="parameter">
+			<Real quantity="VolumeFlow" unit="m³/s" displayUnit="l/min" start="0.00065000000000000008" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.ActivateCooling" valueReference="1073741829" description="If true, cooling system is activated" variability="parameter">
+			<Boolean start="true" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.TRefCooling" valueReference="1073741844" description="Reference indoor temperature (has to be higher than the reference heating temperature!)" variability="parameter">
+			<Real quantity="Temp" unit="K" displayUnit="°C" start="297.14999999999998" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.TFlowCooling" valueReference="1073741845" description="Supply temperature for cooling" variability="parameter">
+			<Real quantity="Temp" unit="K" displayUnit="°C" start="288.14999999999998" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.newWindows" valueReference="1073741830" description="Windows have been replaced after building construction" variability="parameter">
+			<Boolean start="true" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.UseIndividualPresence" valueReference="1073741831" description="If the presence is used, individual presence data has to be provided, else standart presence is used" variability="parameter">
+			<Boolean start="true" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.PresenceFile" valueReference="1073741825" description="File with presence timeseries (presence in %; 0% - no one is at home; 100% - everyone is at home)" variability="parameter">
+			<String start="C:\\Users\\ge23nur\\Documents\\Python Scripts\\electricity_heat_occupancy_timeseries\\simx\\occupancy.txt" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.UseIndividualElecConsumption" valueReference="1073741832" description="If individual electricity consumption is used, individual consumption data ha to be provided, else standart load profiles are used" variability="parameter">
+			<Boolean start="true" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.ElConsumptionFile" valueReference="1073741826" description="File with electric consumption time series (consumption in W)" variability="parameter">
+			<String start="C:\\Users\\ge23nur\\Documents\\Python Scripts\\electricity_heat_occupancy_timeseries\\simx\\power.txt" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.QPerson" valueReference="1073741846" description="Heat Yield per Person" variability="parameter">
+			<Real quantity="Power" unit="Nm/s" displayUnit="kW" start="110." fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.livingZoneAirLeak" valueReference="1073741847" description="Air exchange rate caused by leakage in heated zones" variability="parameter">
+			<Real quantity="Gradient" unit="1/s" displayUnit="1/h" start="0.0001" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.VentilationLossesMinimum" valueReference="1073741848" description="Ventilation losses, when no one is in the building (presence = 0)" variability="parameter">
+			<Real quantity="VolumeFlow" unit="m³/s" displayUnit="m³/h" start="0.00027777777777777778" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.VentilationLossesMaximum" valueReference="1073741849" description="Ventilation losses, when everyone is in the building (presence = 1)" variability="parameter">
+			<Real quantity="VolumeFlow" unit="m³/s" displayUnit="m³/h" start="0.0013888888888888889" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.ActivateNightTimeReduction" valueReference="1073741833" description="If true, night time reduction is activated, else temperature is constant" variability="parameter">
+			<Boolean start="true" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.Tnight" valueReference="1073741850" description="Temperature at night" variability="parameter">
+			<Real quantity="Temp" unit="K" displayUnit="°C" start="291.14999999999998" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.NightTimeReductionStart" valueReference="1073741851" description="Hour, when the temperature can be reduced" variability="parameter">
+			<Real quantity="Time" unit="s" displayUnit="h" start="75600." fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.NightTimeReductionEnd" valueReference="1073741852" description="Hour, when the temperature is day temperature again" variability="parameter">
+			<Real quantity="Time" unit="s" displayUnit="h" start="14400." fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.VariableTemperatureProfile" valueReference="1073741834" description="If true, presence will be used to define the temperature (if less people are at home, less rooms are heated and the average temperature will decrease)" variability="parameter">
+			<Boolean start="true" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.TMin" valueReference="1073741853" description="Minimum temperature, when noone is at home (TRefSet = TMin + (TRef - TMin) * Presence(t))" variability="parameter">
+			<Real quantity="Temp" unit="K" displayUnit="°C" start="293.14999999999998" fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.roofInsul" valueReference="1073741854" description="Thickness of additional insulation of the roof" variability="parameter">
+			<Real quantity="Length" unit="m" displayUnit="cm" start="0." fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.ceilingInsul" valueReference="1073741855" description="Thickness of additional insulation of top floor ceiling" variability="parameter">
+			<Real quantity="Length" unit="m" displayUnit="cm" start="0." fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.wallInsul" valueReference="1073741856" description="Thickness of additional insulation of the outer walls" variability="parameter">
+			<Real quantity="Length" unit="m" displayUnit="cm" start="0." fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.floorInsul" valueReference="1073741857" description="Thickness of additional insulation of walls to cellar or ground" variability="parameter">
+			<Real quantity="Length" unit="m" displayUnit="cm" start="0." fixed="true"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.Heating" valueReference="805306368" description="Heating mode" variability="discrete" causality="output">
+			<Boolean/>
+		</ScalarVariable>
+		<ScalarVariable name="building.Cooling" valueReference="805306369" description="Cooling mode" variability="discrete" causality="output">
+			<Boolean/>
+		</ScalarVariable>
+		<ScalarVariable name="building.TRefSetHeating" valueReference="805306368" description="Reference Temperature for heating (including reduced set temperatures)" variability="continuous" causality="output">
+			<Real quantity="Temp" unit="K" displayUnit="°C"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.QHeat" valueReference="805306369" description="Heat Power" variability="continuous" causality="output">
+			<Real quantity="Power" unit="Nm/s" displayUnit="kW"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.QCold" valueReference="805306370" description="Cooling Power" variability="continuous" causality="output">
+			<Real quantity="Power" unit="Nm/s" displayUnit="kW"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.Pel" valueReference="805306371" description="Common electrical effective power of the zones" variability="continuous" causality="output">
+			<Real quantity="Power" unit="Nm/s" displayUnit="kW"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.EHeat" valueReference="805306372" description="Heating energy during simulation time period" variability="continuous" causality="output">
+			<Real quantity="Energy" unit="J" displayUnit="kWh"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.Eel" valueReference="805306373" description="Electrical energy demand during simulation time period" variability="continuous" causality="output">
+			<Real quantity="Energy" unit="J" displayUnit="kWh"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.TZone[1]" valueReference="805306374" description="Zone temperature of Cellar, living area and roof" variability="continuous" causality="output">
+			<Real quantity="Temp" unit="K" displayUnit="°C"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.TZone[2]" valueReference="805306375" description="Zone temperature of Cellar, living area and roof" variability="continuous" causality="output">
+			<Real quantity="Temp" unit="K" displayUnit="°C"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.TZone[3]" valueReference="805306376" description="Zone temperature of Cellar, living area and roof" variability="continuous" causality="output">
+			<Real quantity="Temp" unit="K" displayUnit="°C"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.TZone[1]" valueReference="805306377" description="Zone temperature of Cellar, living area and roof" variability="continuous" causality="output">
+			<Real quantity="Temp" unit="K" displayUnit="°C"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.TZone[2]" valueReference="805306378" description="Zone temperature of Cellar, living area and roof" variability="continuous" causality="output">
+			<Real quantity="Temp" unit="K" displayUnit="°C"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.TZone[3]" valueReference="805306379" description="Zone temperature of Cellar, living area and roof" variability="continuous" causality="output">
+			<Real quantity="Temp" unit="K" displayUnit="°C"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.TZone[1]" valueReference="805306380" description="Zone temperature of Cellar, living area and roof" variability="continuous" causality="output">
+			<Real quantity="Temp" unit="K" displayUnit="°C"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.TZone[2]" valueReference="805306381" description="Zone temperature of Cellar, living area and roof" variability="continuous" causality="output">
+			<Real quantity="Temp" unit="K" displayUnit="°C"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.TZone[3]" valueReference="805306382" description="Zone temperature of Cellar, living area and roof" variability="continuous" causality="output">
+			<Real quantity="Temp" unit="K" displayUnit="°C"/>
+		</ScalarVariable>
+		<ScalarVariable name="building.ECold" valueReference="805306383" description="Cooling energy during simulation time period" variability="continuous" causality="output">
+			<Real quantity="Energy" unit="J" displayUnit="kWh"/>
+		</ScalarVariable>
+	</ModelVariables>
+	<Implementation>
+		<CoSimulation_StandAlone>
+			<Capabilities canHandleVariableCommunicationStepSize="true" canHandleEvents="true" canRejectSteps="false" canInterpolateInputs="true" maxOutputDerivativeOrder="0" canRunAsynchronuously="false" canBeInstantiatedOnlyOncePerProcess="false" canNotUseMemoryManagementFunctions="true"/>
+		</CoSimulation_StandAlone>
+	</Implementation>
+</fmiModelDescription>

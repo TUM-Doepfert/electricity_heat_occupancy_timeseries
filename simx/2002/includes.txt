@@ -1,0 +1,3 @@
+ \
+	/I ".\sundials\include" \
+	/I "c:\users\public\documents\simulationx 4.2\modelica\modelica 3.2.2"

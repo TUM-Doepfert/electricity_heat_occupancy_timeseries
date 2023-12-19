@@ -1,0 +1,179 @@
+RM = rm -f
+
+CFLAGS = -O3 -fPIC
+CPPFLAGS = -DNDEBUG -DTABLE_SHARE -DHAVE_ZLIB=1 -DHAVE_UNISTD_H -DHAVE_STDARG_H=1 -DHAVE_HIDDEN -DHAVE_MEMCPY
+PLATFORMDIR = win64
+INC = \
+	-I . \
+	-I "./sundials/include" \
+	-I "c:/users/public/documents/simulationx 4.2/modelica/modelica 3.2.2/"
+LDFLAGS =
+LDLIBS = -lm
+ifneq ($(OS),Windows_NT)
+	LDLIBS += -ldl
+endif
+
+OBJECTS = \
+	./ITI_ArrayFunctions.o \
+	./ITI_FunctionsAlloc.o \
+	./ITI_Functions.o \
+	./ITI_LinSolver.o \
+	./ITI_big_uint.o \
+	./ITI_Memory.o \
+	./ModelicaUtilities.o \
+	./snprintf.o \
+	./ITI_AllocClockInference.o \
+	./ITI_ClockInference.o \
+	./ITI_ClockEval.o \
+	./ITI_PartitionEval.o \
+	./ITI_PartitionInit.o \
+	./ITI_PartitionSolver.o \
+	./ITI_PartitionInterface.o \
+	./ModelicaStandardTables.o \
+	./ModelicaStandardTablesUsertab.o \
+	./zlib.o \
+	./c_aes.o \
+	./ModelicaIO.o \
+	./ModelicaMatIO.o \
+	./ModelicaStrings.o \
+	./ITI_SolverHelpers.o \
+	./ITI_NonLinSolver.o \
+	./ITI_Cvode_FMI_CS.o \
+	./ITI_fmiCSFunctions.o \
+	./ITI_Tracing.o \
+	./ITI_Cvode_base.o \
+	./ITI_Cvode_model_if.o \
+	./ITI_Cvode_jac.o \
+	./ITI_Cvode_helpers.o \
+	./ITI_Cvode_sparse.o \
+	./ma_lequspar.o \
+	./ma_matspars.o \
+	./ma_serialization.o \
+	./cvode.o \
+	./cvode_dense.o \
+	./cvode_io.o \
+	./cvode_serialization.o \
+	./cvode_tracing.o \
+	./nvector_serial.o \
+	./sundials_dense.o \
+	./sundials_math.o \
+	./sundials_nvector.o \
+	./sundials_serialization.o \
+	./sundials_smalldense.o \
+	./cg_model_2016.o \
+	./cg_model_2016_init.o \
+	./cg_model_2016_functions.o \
+	./cg_model_2016_decl.o \
+	./cg_model_2016_initjac.o \
+	./cg_model_2016_jac.o
+
+model_2016.so: $(OBJECTS)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(LDFLAGS) -Wl,--no-undefined -Wl,--allow-multiple-definition -shared -o model_2016.so $(OBJECTS) $(LDLIBS)
+
+./ITI_ArrayFunctions.o: ITI_ArrayFunctions.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_ArrayFunctions.c
+./ITI_FunctionsAlloc.o: ITI_FunctionsAlloc.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_FunctionsAlloc.c
+./ITI_Functions.o: ITI_Functions.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_Functions.c
+./ITI_LinSolver.o: ITI_LinSolver.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_LinSolver.c
+./ITI_big_uint.o: ITI_big_uint.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_big_uint.c
+./ITI_Memory.o: ITI_Memory.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_Memory.c
+./ModelicaUtilities.o: ModelicaUtilities.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ModelicaUtilities.c
+./snprintf.o: snprintf.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./snprintf.c
+./ITI_AllocClockInference.o: ITI_AllocClockInference.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_AllocClockInference.c
+./ITI_ClockInference.o: ITI_ClockInference.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_ClockInference.c
+./ITI_ClockEval.o: ITI_ClockEval.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_ClockEval.c
+./ITI_PartitionEval.o: ITI_PartitionEval.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_PartitionEval.c
+./ITI_PartitionInit.o: ITI_PartitionInit.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_PartitionInit.c
+./ITI_PartitionSolver.o: ITI_PartitionSolver.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_PartitionSolver.c
+./ITI_PartitionInterface.o: ITI_PartitionInterface.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_PartitionInterface.c
+./ModelicaStandardTables.o: ModelicaStandardTables.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ModelicaStandardTables.c
+./ModelicaStandardTablesUsertab.o: ModelicaStandardTablesUsertab.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ModelicaStandardTablesUsertab.c
+./zlib.o: zlib.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./zlib.c
+./c_aes.o: c_aes.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./c_aes.c
+./ModelicaIO.o: ModelicaIO.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ModelicaIO.c
+./ModelicaMatIO.o: ModelicaMatIO.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ModelicaMatIO.c
+./ModelicaStrings.o: ModelicaStrings.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ModelicaStrings.c
+./ITI_SolverHelpers.o: ITI_SolverHelpers.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_SolverHelpers.c
+./ITI_NonLinSolver.o: ITI_NonLinSolver.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_NonLinSolver.c
+./ITI_Cvode_FMI_CS.o: ITI_Cvode_FMI_CS.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_Cvode_FMI_CS.c
+./ITI_fmiCSFunctions.o: ITI_fmiCSFunctions.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_fmiCSFunctions.c
+./ITI_Tracing.o: ITI_Tracing.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_Tracing.c
+./ITI_Cvode_base.o: ITI_Cvode_base.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_Cvode_base.c
+./ITI_Cvode_model_if.o: ITI_Cvode_model_if.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_Cvode_model_if.c
+./ITI_Cvode_jac.o: ITI_Cvode_jac.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_Cvode_jac.c
+./ITI_Cvode_helpers.o: ITI_Cvode_helpers.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_Cvode_helpers.c
+./ITI_Cvode_sparse.o: ITI_Cvode_sparse.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ITI_Cvode_sparse.c
+./ma_lequspar.o: ma_lequspar.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ma_lequspar.c
+./ma_matspars.o: ma_matspars.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ma_matspars.c
+./ma_serialization.o: ma_serialization.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./ma_serialization.c
+./cvode.o: sundials/src/cvode/cvode.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./sundials/src/cvode/cvode.c
+./cvode_dense.o: sundials/src/cvode/cvode_dense.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./sundials/src/cvode/cvode_dense.c
+./cvode_io.o: sundials/src/cvode/cvode_io.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./sundials/src/cvode/cvode_io.c
+./cvode_serialization.o: sundials/src/cvode/cvode_serialization.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./sundials/src/cvode/cvode_serialization.c
+./cvode_tracing.o: sundials/src/cvode/cvode_tracing.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./sundials/src/cvode/cvode_tracing.c
+./nvector_serial.o: sundials/src/nvec_ser/nvector_serial.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./sundials/src/nvec_ser/nvector_serial.c
+./sundials_dense.o: sundials/src/sundials/sundials_dense.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./sundials/src/sundials/sundials_dense.c
+./sundials_math.o: sundials/src/sundials/sundials_math.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./sundials/src/sundials/sundials_math.c
+./sundials_nvector.o: sundials/src/sundials/sundials_nvector.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./sundials/src/sundials/sundials_nvector.c
+./sundials_serialization.o: sundials/src/sundials/sundials_serialization.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./sundials/src/sundials/sundials_serialization.c
+./sundials_smalldense.o: sundials/src/sundials/sundials_smalldense.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./sundials/src/sundials/sundials_smalldense.c
+./cg_model_2016.o: cg_model_2016.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./cg_model_2016.c
+./cg_model_2016_init.o: cg_model_2016_init.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./cg_model_2016_init.c
+./cg_model_2016_functions.o: cg_model_2016_functions.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./cg_model_2016_functions.c
+./cg_model_2016_decl.o: cg_model_2016_decl.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./cg_model_2016_decl.c
+./cg_model_2016_initjac.o: cg_model_2016_initjac.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./cg_model_2016_initjac.c
+./cg_model_2016_jac.o: cg_model_2016_jac.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c ./cg_model_2016_jac.c
+
+clean:
+	$(RM) $(OBJECTS)

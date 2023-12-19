@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="UserMacros">
+    <PlatformDir Condition="'$(Platform)'=='Win32'">win32</PlatformDir>
+    <PlatformDir Condition="'$(Platform)'=='x64'">win64</PlatformDir>
+  </PropertyGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName />
+    <SccLocalPath />
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetExt>.dll</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetExt>.dll</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetExt>.dll</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetExt>.dll</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalIncludeDirectories>.\sundials\include;c:\users\public\documents\simulationx 4.2\modelica\modelica 3.2.2\;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;TABLE_SHARE;HAVE_ZLIB=1;HAVE_STDARG_H=1;HAVE_MEMCPY;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/Zm200</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+    </ClCompile>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Bscmake>
+    <Link>
+      <OptimizeReferences>false</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+            <AdditionalIncludeDirectories>.\sundials\include;c:\users\public\documents\simulationx 4.2\modelica\modelica 3.2.2\;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;TABLE_SHARE;HAVE_ZLIB=1;HAVE_STDARG_H=1;HAVE_MEMCPY;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/Zm200</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+    </ClCompile>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Bscmake>
+    <Link>
+      <OptimizeReferences>false</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalIncludeDirectories>.\sundials\include;c:\users\public\documents\simulationx 4.2\modelica\modelica 3.2.2\;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;TABLE_SHARE;HAVE_ZLIB=1;HAVE_STDARG_H=1;HAVE_MEMCPY;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/Zm200</AdditionalOptions>
+      <RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
+    </ClCompile>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Bscmake>
+    <Link>
+      <OptimizeReferences>false</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+            <AdditionalIncludeDirectories>.\sundials\include;c:\users\public\documents\simulationx 4.2\modelica\modelica 3.2.2\;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;TABLE_SHARE;HAVE_ZLIB=1;HAVE_STDARG_H=1;HAVE_MEMCPY;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/Zm200</AdditionalOptions>
+      <RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
+    </ClCompile>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Bscmake>
+    <Link>
+      <OptimizeReferences>false</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="ITI_ArrayFunctions.c" />
+    <ClCompile Include="ITI_FunctionsAlloc.c" />
+    <ClCompile Include="ITI_Functions.c" />
+    <ClCompile Include="ITI_LinSolver.c" />
+    <ClCompile Include="ITI_big_uint.c" />
+    <ClCompile Include="ITI_Memory.c" />
+    <ClCompile Include="ModelicaUtilities.c" />
+    <ClCompile Include="snprintf.c" />
+    <ClCompile Include="ITI_AllocClockInference.c" />
+    <ClCompile Include="ITI_ClockInference.c" />
+    <ClCompile Include="ITI_ClockEval.c" />
+    <ClCompile Include="ITI_PartitionEval.c" />
+    <ClCompile Include="ITI_PartitionInit.c" />
+    <ClCompile Include="ITI_PartitionSolver.c" />
+    <ClCompile Include="ITI_PartitionInterface.c" />
+    <ClCompile Include="ModelicaStandardTables.c" />
+    <ClCompile Include="ModelicaStandardTablesUsertab.c" />
+    <ClCompile Include="zlib.c" />
+    <ClCompile Include="c_aes.c" />
+    <ClCompile Include="ModelicaIO.c" />
+    <ClCompile Include="ModelicaMatIO.c" />
+    <ClCompile Include="ModelicaStrings.c" />
+    <ClCompile Include="ITI_SolverHelpers.c" />
+    <ClCompile Include="ITI_NonLinSolver.c" />
+    <ClCompile Include="ITI_Cvode_FMI_CS.c" />
+    <ClCompile Include="ITI_fmiCSFunctions.c" />
+    <ClCompile Include="ITI_Tracing.c" />
+    <ClCompile Include="ITI_Cvode_base.c" />
+    <ClCompile Include="ITI_Cvode_model_if.c" />
+    <ClCompile Include="ITI_Cvode_jac.c" />
+    <ClCompile Include="ITI_Cvode_helpers.c" />
+    <ClCompile Include="ITI_Cvode_sparse.c" />
+    <ClCompile Include="ma_lequspar.c" />
+    <ClCompile Include="ma_matspars.c" />
+    <ClCompile Include="ma_serialization.c" />
+    <ClCompile Include="sundials\src\cvode\cvode.c" />
+    <ClCompile Include="sundials\src\cvode\cvode_dense.c" />
+    <ClCompile Include="sundials\src\cvode\cvode_io.c" />
+    <ClCompile Include="sundials\src\cvode\cvode_serialization.c" />
+    <ClCompile Include="sundials\src\cvode\cvode_tracing.c" />
+    <ClCompile Include="sundials\src\nvec_ser\nvector_serial.c" />
+    <ClCompile Include="sundials\src\sundials\sundials_dense.c" />
+    <ClCompile Include="sundials\src\sundials\sundials_math.c" />
+    <ClCompile Include="sundials\src\sundials\sundials_nvector.c" />
+    <ClCompile Include="sundials\src\sundials\sundials_serialization.c" />
+    <ClCompile Include="sundials\src\sundials\sundials_smalldense.c" />
+    <ClCompile Include="cg_model_2009.c" />
+    <ClCompile Include="cg_model_2009_init.c" />
+    <ClCompile Include="cg_model_2009_functions.c" />
+    <ClCompile Include="cg_model_2009_decl.c" />
+    <ClCompile Include="cg_model_2009_initjac.c" />
+    <ClCompile Include="cg_model_2009_jac.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ITI_ArrayFunctions.h" />
+    <ClInclude Include="ITI_FunctionsAlloc.h" />
+    <ClInclude Include="ITI_Functions.h" />
+    <ClInclude Include="ITI_LinSolver.h" />
+    <ClInclude Include="ITI_big_uint.h" />
+    <ClInclude Include="ITI_Memory.h" />
+    <ClInclude Include="ITI_Types.h" />
+    <ClInclude Include="ModelicaUtilities.h" />
+    <ClInclude Include="ITI_BlockDeclarations.h" />
+    <ClInclude Include="ITI_DeclarationsBase.h" />
+    <ClInclude Include="ITI_AllocClockInference.h" />
+    <ClInclude Include="ITI_ClockInference.h" />
+    <ClInclude Include="ITI_ClockEval.h" />
+    <ClInclude Include="ITI_PartitionEval.h" />
+    <ClInclude Include="ITI_PartitionInit.h" />
+    <ClInclude Include="ITI_PartitionSolver.h" />
+    <ClInclude Include="ITI_PartitionInterface.h" />
+    <ClInclude Include="gconstructor.h" />
+    <ClInclude Include="uthash.h" />
+    <ClInclude Include="ModelicaStandardTables.h" />
+    <ClInclude Include="zlib.h" />
+    <ClInclude Include="c_aes.h" />
+    <ClInclude Include="ModelicaIO.h" />
+    <ClInclude Include="ModelicaMatIO.h" />
+    <ClInclude Include="ModelicaStrings.h" />
+    <ClInclude Include="ITI_SolverHelpers.h" />
+    <ClInclude Include="ITI_NonLinSolver.h" />
+    <ClInclude Include="fmiPlatformTypes.h" />
+    <ClInclude Include="fmiFunctions.h" />
+    <ClInclude Include="ITI_crt.h" />
+    <ClInclude Include="ITI_Cvode_FMI_CS.h" />
+    <ClInclude Include="ITI_fmiCSTypes.h" />
+    <ClInclude Include="ITI_Tracing.h" />
+    <ClInclude Include="ITI_Declarations.h" />
+    <ClInclude Include="ITI_Cvode_base.h" />
+    <ClInclude Include="ITI_Cvode_model_if.h" />
+    <ClInclude Include="ITI_Cvode_jac.h" />
+    <ClInclude Include="ITI_ModelInclude.h" />
+    <ClInclude Include="ITI_Cvode_helpers.h" />
+    <ClInclude Include="ITI_Cvode_sparse.h" />
+    <ClInclude Include="ma_serialization.h" />
+    <ClInclude Include="ma_sparse.h" />
+    <ClInclude Include="ma_typedef.h" />
+    <ClInclude Include="sundials\include\cvode\cvode.h" />
+    <ClInclude Include="sundials\include\cvode\cvode_dense.h" />
+    <ClInclude Include="sundials\include\cvode\cvode_serialization.h" />
+    <ClInclude Include="sundials\include\cvode\cvode_tracing.h" />
+    <ClInclude Include="sundials\include\nvector\nvector_serial.h" />
+    <ClInclude Include="sundials\include\sundials\sundials_config.h" />
+    <ClInclude Include="sundials\include\sundials\sundials_dense.h" />
+    <ClInclude Include="sundials\include\sundials\sundials_math.h" />
+    <ClInclude Include="sundials\include\sundials\sundials_nvector.h" />
+    <ClInclude Include="sundials\include\sundials\sundials_serialization.h" />
+    <ClInclude Include="sundials\include\sundials\sundials_smalldense.h" />
+    <ClInclude Include="sundials\include\sundials\sundials_types.h" />
+    <ClInclude Include="sundials\src\cvode\cvode_dense_impl.h" />
+    <ClInclude Include="sundials\src\cvode\cvode_impl.h" />
+    <ClInclude Include="cg_model_2009.h" />
+    <ClInclude Include="cg_model_2009_functions.h" />
+    <ClInclude Include="cg_model_2009_CurveData.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
